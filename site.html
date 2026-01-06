@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Design Playground</title>
+  <style>
+    :root{
+      --bg: #0b0d12;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --accent: #8b5cf6; /* 보라 */
+      --accent2:#22c55e; /* 초록 */
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 24px;
+      --max: 1080px;
+      --font: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", Roboto, Arial;
+    }
+    [data-theme="light"]{
+      --bg: #f7f8fc;
+      --panel: rgba(0,0,0,.04);
+      --panel2: rgba(0,0,0,.06);
+      --border: rgba(0,0,0,.10);
+      --text: rgba(0,0,0,.88);
+      --muted: rgba(0,0,0,.60);
+      --shadow: 0 18px 50px rgba(0,0,0,.12);
+    }
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 25% 10%, rgba(139,92,246,.24), transparent 55%),
+        radial-gradient(900px 520px at 85% 20%, rgba(34,197,94,.16), transparent 55%),
+        radial-gradient(900px 520px at 40% 90%, rgba(59,130,246,.14), transparent 55%),
+        var(--bg);
+      min-height: 100vh;
+    }
+    a{ color: inherit; text-decoration: none; }
+    .container{ width: min(var(--max), 92vw); margin: 0 auto; }
+    header{
+      position: sticky; top:0;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(0,0,0,.35), transparent);
+      border-bottom: 1px solid var(--border);
+      z-index: 50;
+    }
+    .nav{
+      display:flex; align-items:center; justify-content: space-between;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 10px;
+      font-weight: 900; letter-spacing: -0.02em;
+    }
+    .dot{
+      width: 12px; height: 12px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(139,92,246,.12);
+    }
+    .navlinks{ display:flex; gap: 14px; align-items:center; }
+    .chip{
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      font-weight: 700;
+      opacity: .9;
+    }
+    .chip:hover{ background: var(--panel2); }
+    .btn{
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      font-weight: 850;
+      cursor:pointer;
+    }
+    .btn:hover{ background: var(--panel2); }
+    .btn.primary{
+      border-color: rgba(139,92,246,.35);
+      background: linear-gradient(135deg, rgba(139,92,246,.25), rgba(34,197,94,.14));
+    }
+
+    main{ padding: 30px 0 60px; }
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+    .card{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .heroLeft{ padding: 26px; }
+    .kicker{
+      display:inline-flex; gap: 8px; align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .title{
+      font-size: clamp(30px, 4.2vw, 52px);
+      line-height: 1.03;
+      margin: 14px 0 10px;
+      letter-spacing: -0.04em;
+    }
+    .subtitle{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+      max-width: 56ch;
+    }
+    .actions{ display:flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+    .heroRight{
+      position: relative;
+      min-height: 280px;
+    }
+    .blob{
+      position:absolute; inset: -40px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(139,92,246,.38), transparent 55%),
+        radial-gradient(circle at 70% 40%, rgba(34,197,94,.24), transparent 55%),
+        radial-gradient(circle at 50% 80%, rgba(59,130,246,.18), transparent 55%);
+      filter: blur(18px);
+      transform: scale(1.06);
+      opacity: .9;
+    }
+    .mock{
+      position:absolute; inset: 14px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.20);
+      overflow:hidden;
+    }
+    .mockTop{
+      display:flex; align-items:center; justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+    .lights{ display:flex; gap: 7px; align-items:center; }
+    .light{ width: 10px; height: 10px; border-radius: 999px; background: rgba(255,255,255,.22); }
+    .mockBody{
+      padding: 14px;
+      display:grid;
+      gap: 10px;
+    }
+    .miniRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .mini{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .mini h4{ margin:0 0 6px; font-size: 13px; letter-spacing:-0.02em; }
+    .mini p{ margin:0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+    .section{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    .tile{ padding: 16px; border-radius: var(--radius); }
+    .tile h3{ margin: 0 0 8px; letter-spacing:-0.02em; }
+    .tile p{ margin:0; color: var(--muted); line-height: 1.6; font-size: 14px; }
+
+    .split{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form{
+      padding: 16px;
+      display:grid;
+      gap: 10px;
+    }
+    input, textarea{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-family: var(--font);
+      outline: none;
+    }
+    textarea{ min-height: 110px; resize: vertical; }
+    input:focus, textarea:focus{
+      border-color: rgba(139,92,246,.45);
+      box-shadow: 0 0 0 6px rgba(139,92,246,.12);
+    }
+
+    footer{
+      padding: 26px 0 34px;
+      color: var(--muted);
+      text-align:center;
+    }
+
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+      .section{ grid-template-columns: 1fr; }
+      .split{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="brand">
+          <span class="dot"></span>
+          <span id="brandName">Design Playground</span>
+        </div>
+        <div class="navlinks">
+          <a class="chip" href="#work">Work</a>
+          <a class="chip" href="#about">About</a>
+          <a class="chip" href="#contact">Contact</a>
+          <button class="btn" id="themeBtn" aria-label="toggle theme">🌙</button>
+          <button class="btn primary" id="ctaBtn">Get template</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="card heroLeft">
+        <span class="kicker">✨ vibe-coding playground · 1 file · no framework</span>
+        <h1 class="title" id="heroTitle">내 취향을 “레이아웃”으로 증명하기</h1>
+        <p class="subtitle" id="heroSub">
+          이 페이지는 디자인 실험용 템플릿이야. 타이포, 간격, 컴포넌트, 색감을 바꾸면서
+          “내가 만들고 싶은 사이트”를 직접 조형해보자.
+        </p>
+        <div class="actions">
+          <button class="btn primary" id="primaryBtn">바로 수정 시작</button>
+          <button class="btn" id="secondaryBtn">스타일 랜덤</button>
+        </div>
+      </div>
+
+      <div class="card heroRight" aria-hidden="true">
+        <div class="blob"></div>
+        <div class="mock">
+          <div class="mockTop">
+            <div class="lights">
+              <span class="light"></span><span class="light"></span><span class="light"></span>
+            </div>
+            <div style="font-size:12px;color:var(--muted);font-weight:700;">Preview</div>
+          </div>
+          <div class="mockBody">
+            <div class="miniRow">
+              <div class="mini">
+                <h4>타이포</h4>
+                <p>제목 크기/자간/줄간격으로 분위기 결정</p>
+              </div>
+              <div class="mini">
+                <h4>컬러</h4>
+                <p>포인트 색은 1~2개만, 나머지는 조용하게</p>
+              </div>
+            </div>
+            <div class="mini">
+              <h4>컴포넌트</h4>
+              <p>버튼/칩/카드만 잘 맞춰도 사이트가 ‘정돈’돼 보임</p>
+            </div>
+            <div class="miniRow">
+              <div class="mini">
+                <h4>리듬</h4>
+                <p>간격(8/12/16/24…)을 규칙으로</p>
+              </div>
+              <div class="mini">
+                <h4>인터랙션</h4>
+                <p>호버/포커스만 넣어도 살아남</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="card tile">
+        <h3>Section 카드 1</h3>
+        <p>여기 텍스트를 네 사이트 주제에 맞게 바꾸면 돼.</p>
+      </div>
+      <div class="card tile">
+        <h3>Section 카드 2</h3>
+        <p>레이아웃은 이미 잡혀 있으니까, 콘텐츠와 톤만 넣자.</p>
+      </div>
+      <div class="card tile">
+        <h3>Section 카드 3</h3>
+        <p>필요하면 사진/아이콘 자리도 만들어줄게.</p>
+      </div>
+    </section>
+
+    <section class="split" id="about">
+      <div class="card tile">
+        <h3>About</h3>
+        <p>
+          이 영역은 “너 소개 / 브랜드 소개 / 프로젝트 소개” 같은 걸 넣기 좋음.
+          문장 길이를 줄이고, 핵심 단어를 굵게 쓰면 더 예뻐져.
+        </p>
+      </div>
+
+      <div class="card form" id="contact">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div>
+            <div style="font-weight:900;letter-spacing:-0.02em;">Contact</div>
+            <div style="color:var(--muted);font-size:13px;margin-top:3px;">이 폼은 데모(저장 X)</div>
+          </div>
+          <span class="kicker">UI test</span>
+        </div>
+        <input placeholder="이름" />
+        <input placeholder="이메일" />
+        <textarea placeholder="메시지"></textarea>
+        <button class="btn primary" type="button" id="fakeSend">Send</button>
+        <div id="toast" style="display:none;color:var(--muted);font-size:12px;">보냈다 치자 😄</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Design Playground · built with vibes
+  </footer>
+
+  <script>
+    const root = document.body;
+    const themeBtn = document.getElementById("themeBtn");
+    const toast = document.getElementById("toast");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function setTheme(next){
+      root.setAttribute("data-theme", next);
+      themeBtn.textContent = next === "dark" ? "🌙" : "☀️";
+    }
+    themeBtn.addEventListener("click", () => {
+      const cur = root.getAttribute("data-theme") || "dark";
+      setTheme(cur === "dark" ? "light" : "dark");
+    });
+
+    // quick fun: style randomizer (accent colors only)
+    function randHex(){
+      const h = Math.floor(Math.random()*360);
+      return `hsl(${h} 85% 62%)`;
+    }
+    document.getElementById("secondaryBtn").addEventListener("click", () => {
+      root.style.setProperty("--accent", randHex());
+      root.style.setProperty("--accent2", randHex());
+    });
+
+    document.getElementById("primaryBtn").addEventListener("click", () => {
+      alert("이제 원하는 사이트 레퍼런스/톤만 말해줘. 내가 그 방향으로 바로 리디자인해줄게!");
+    });
+
+    document.getElementById("fakeSend").addEventListener("click", () => {
+      toast.style.display = "block";
+      clearTimeout(window.__t);
+      window.__t = setTimeout(()=>toast.style.display="none", 1300);
+    });
+
+    // CTA: just for vibe
+    document.getElementById("ctaBtn").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      alert("템플릿은 이미 너한테 있음 😎 이제 디자인 방향만 고르자.");
+    });
+  </script>
+</body>
+</html>
